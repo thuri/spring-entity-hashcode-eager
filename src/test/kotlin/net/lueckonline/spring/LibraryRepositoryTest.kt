@@ -12,26 +12,49 @@ open class LibraryRepositoryTest(
     @param:Autowired val entityManager: TestEntityManager,
 ) {
 
+    @Autowired
+    private lateinit var bookRepository: BookRepository
+
     @Test
-    fun `can save and find library with books`() {
+    fun `can save and find library with books and subsidiaries`() {
         val libraryId = libraryRepository.save(
             Library(
                 name = "Central Library",
-                books = mutableSetOf(
-                    Book(title = "Book One"),
-                    Book(title = "Book Two"),
-                    Book(title = "Book Three")
-                )
             ).apply {
-                this.books.forEach { book -> book.library = this }
+                this.books.addAll(
+                    setOf(
+                        Book(title = "Book One", genre = Genre.BIOGRAPHY),
+                        Book(title = "Book Two", genre = Genre.NON_FICTION),
+                        Book(title = "Book Three", genre = Genre.FICTION)
+                    )
+                )
+                this.books.forEach { book -> book.library = this}
+                this.subsidiaries.addAll(
+                    setOf(
+                        Subsidiary(name = "Subsidiary 1", address = "Address 1"),
+                        Subsidiary(name = "Subsidiary 2", address = "Address 2"),
+                        Subsidiary(name = "Subsidiary 3", address = "Address 3"),
+                        Subsidiary(name = "Subsidiary 4", address = "Address 4")
+                    )
+                )
+                this.subsidiaries.forEach { subsidiary -> subsidiary.library = this }
             }
         ).id
 
         entityManager.flush()
         entityManager.clear()
 
-        val library = libraryRepository.findById(libraryId).orElseThrow()
-        assertThat(library.books.remove(library.books.first())).isTrue
+        libraryRepository.findById(libraryId).orElseThrow().let { it ->
+            assertThat(it.books.remove(it.books.find { it.title == "Book Two" })).isTrue
+        }
+
+        entityManager.flush()
+        entityManager.clear()
+
+        val removed = bookRepository.findByTitleAndGenre(title = "Book One", genre = Genre.BIOGRAPHY).first().let {
+            it.library!!.books.remove(it)
+        }
+        assertThat(removed).isTrue
 
     }
 }

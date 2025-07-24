@@ -10,5 +10,8 @@ class Library(
     var name: String,
 
     @OneToMany(mappedBy = "library", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
-    val books: MutableSet<Book> = mutableSetOf()
+    val books: MutableSet<Book> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "library", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
+    val subsidiaries: MutableSet<Subsidiary> = mutableSetOf()
 )

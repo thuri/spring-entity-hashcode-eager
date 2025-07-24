@@ -10,6 +10,8 @@ class Book(
     val id: UUID = UUID.randomUUID(),
     var title: String,
 
+    var genre: Genre,
+
     @ManyToOne
     @JoinColumn(name = "library_id")
     var library: Library? = null
@@ -28,4 +30,3 @@ class Book(
         return Objects.hash(title)
     }
 }
-

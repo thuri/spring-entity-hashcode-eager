@@ -9,7 +9,7 @@ class Library(
     val id: UUID = UUID.randomUUID(),
     var name: String,
 
-    @OneToMany(mappedBy = "library", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "library", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
     val books: MutableSet<Book> = mutableSetOf(),
 
     @OneToMany(mappedBy = "library", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)

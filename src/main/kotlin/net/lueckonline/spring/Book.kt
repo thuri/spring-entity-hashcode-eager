@@ -8,9 +8,10 @@ import java.util.UUID
 class Book(
     @Id
     val id: UUID = UUID.randomUUID(),
-    var title: String,
 
-    var genre: Genre,
+    val title: String,
+
+    val genre: Genre,
 
     @ManyToOne
     @JoinColumn(name = "library_id")

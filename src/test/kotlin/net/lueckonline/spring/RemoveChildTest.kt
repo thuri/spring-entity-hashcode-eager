@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 
 @DataJpaTest
-open class LibraryRepositoryTest(
+open class RemoveChildTest(
     @param:Autowired val libraryRepository: LibraryRepository,
     @param:Autowired val entityManager: TestEntityManager,
 ) {
